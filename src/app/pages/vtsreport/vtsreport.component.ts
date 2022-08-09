@@ -1,8 +1,6 @@
 import {Component,OnInit} from '@angular/core';
-
 import { ApiService } from '@services/api.service';
-import { IVTSResponce, VTSModel } from '@/models/IVTSModel';
-
+import { VTSModel } from '@/models/IVTSModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -21,7 +19,7 @@ export class VtsreportComponent implements OnInit {
   baseURL = this.API_URL;
   Vtsdata:VTSModel[];
   columns = [{ prop: 'Ticket_No' }, { prop: 'Vehicle_No' }, { prop: 'Net_Date' }, { prop: 'Net_Time' }, 
-  { prop: 'GrossWt' }, { prop: 'TareWt' }, { prop: 'NetWt' }];
+             { prop: 'GrossWt' }, { prop: 'TareWt' }, { prop: 'NetWt' }];
   selected = [];
   ColumnMode = ColumnMode;
   SelectionType = SelectionType;
@@ -31,20 +29,18 @@ export class VtsreportComponent implements OnInit {
   //     format: new GeoJSON()
   //   });
   ngOnInit(): void {
+    debugger;
     this.searchForm = this._fb.group({     
       fromdate: [new Date(), [Validators.required]],
       todate: [new Date(), [Validators.required]],
-    });
-   
-
-  
-    
+    });    
   }
   onSubmit(){
     console.log(this.searchForm.value)
     this.apiService.getVTSWBData(this.searchForm.value.fromdate,this.searchForm.value.todate).subscribe(
       (result)=>{
-      this.Vtsdata=result.Data;
+        debugger;
+        this.Vtsdata=result.Data;
     //  console.log(result)
       },
       (err)=>{
@@ -56,7 +52,7 @@ export class VtsreportComponent implements OnInit {
 
   onSelect({ selected }) {
 
-    
+    debugger;
     this.apiService.getMapContentParams(selected[0]);   
          const dialogConfig = new MatDialogConfig();               
                 dialogConfig.disableClose = false;

@@ -18,7 +18,9 @@ export class ApiService {
     public mapContent = new BehaviorSubject<any>({});
     public featureParams = this.mapContent.asObservable();
     public SearchParams = this.searchContent.asObservable();
-    constructor(private _httpClient: HttpClient) {}
+    constructor(private _httpClient: HttpClient) {
+      debugger
+    }
 
     private handleError(errorResponce: HttpErrorResponse) {
         if (errorResponce.error instanceof ErrorEvent) {
@@ -30,7 +32,8 @@ export class ApiService {
         return throwError(()=>"something went wrong");
       }
       getMapContentParams(VideoModel:any) {
-      
+        debugger;
+        // this.mapContent = new BehaviorSubject({});
         this.mapContent.next(VideoModel);
       }
       getSearchContentParams(SearchModel:any) {
@@ -41,6 +44,7 @@ export class ApiService {
           .pipe(catchError(this.handleError));
       }
       getVTSLocationData(Ticket:any): Observable<IVTSResponce> {
+        debugger;
         return this._httpClient.get<IVTSResponce>(this.baseURL + "GetVTSLocationData?Ticket="+Ticket)
           .pipe(catchError(this.handleError));
       }

@@ -14,6 +14,7 @@ import {PrivacyPolicyComponent} from '@modules/privacy-policy/privacy-policy.com
 import {MainMenuComponent} from '@pages/main-menu/main-menu.component';
 import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
 import { VtsreportComponent } from '@pages/vtsreport/vtsreport.component';
+import { VtsreportnewComponent } from '@pages/vtsreportnew/vtsreportnew.component';
 
 const routes: Routes = [
     {
@@ -40,11 +41,15 @@ const routes: Routes = [
             },
             {
                 path: '',
-                component: DashboardComponent
+                component: VtsreportnewComponent
             },
+            // {
+            //     path: 'vtsdata',
+            //     component: VtsreportComponent
+            // }
             {
                 path: 'vtsdata',
-                component: VtsreportComponent
+                component: VtsreportComponent      // added routing fot vtsreportnew component
             }
         ]
     },

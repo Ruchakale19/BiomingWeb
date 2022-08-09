@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    baseRptUrl: 'https://swm.mcgm.gov.in/biominingapi/api/Mulund/'
+    baseRptUrl: 'http://localhost/biominingapi/api/mulund/'
 };
 
 /*

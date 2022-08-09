@@ -1,0 +1,61 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #fff;
+  }
+
+.viewmapbutton {
+  background-image: url('../../../assets/img/map1.jpg');
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: transparent;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+}
+.viewmapbutton :hover {
+  background-color: blue;
+}
+
+
+// popup
+
+.box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  margin-top: 10%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2000px;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}

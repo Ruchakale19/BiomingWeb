@@ -1,0 +1,160 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+
+
+        <!-- Horizontal Form -->
+        <div class="card card-info">
+          <div class="card-header">
+            <h3 class="card-title">VTS Search</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form class="form-horizontal" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+            <div class="card-body">
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">From date</label>
+                <div class="col-sm-4">
+                  <input type="date" class="form-control" id="inputEmail3" placeholder="From date"
+                    formControlName="fromdate">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">To Date</label>
+                <div class="col-sm-4">
+                  <input type="date" class="form-control" id="inputPassword3" placeholder="To Date"
+                    formControlName="todate">
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-info">Search</button>
+              <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
+
+              <!-- <a class="button" href="#openmap">Let me Pop up</a> -->
+
+            </div>
+            <!-- /.card-footer -->
+          </form>
+        </div>
+        <!-- /.card -->
+
+      </div>
+      <!--/.col (left) -->
+
+    </div>
+    <!-- /.row -->
+
+    <!-- <div>
+        <ngx-datatable 
+        class="material expandable"         
+        [columns]="columns"
+        [headerHeight]="50"
+        [footerHeight]="50"         
+        [limit]="100"
+        [rowHeight]="50"   
+        [scrollbarH]="true"         
+        [scrollbarV]="true"    
+        [rows]="Vtsdata" 
+        [selected]="selected"
+        [selectionType]="SelectionType.single"
+        (select)="onSelect($event)"
+        > </ngx-datatable>
+      </div> -->
+
+    <!-- Add my code here -->
+
+    <br>
+
+    <table *ngIf="lstVtsData.length > 0">
+      <tr style="text-align: center;">
+        <th>Ticket_No</th>
+        <th>Vehicle_No</th>
+        <th>Net_Date</th>
+        <th>Net_Time</th>
+        <th>TareWt</th>
+        <th>NetWt</th>
+        <th>Map</th>
+      </tr>
+      <tr *ngFor="let v of lstVtsData">
+        <td> {{ v.Ticket_No }} </td>
+        <td> {{ v.Vehicle_No }} </td>
+        <td> {{ v.Net_Date }} </td>
+        <td> {{ v.Net_Time }} </td>
+        <td> {{ v.TareWt }} </td>
+        <td> {{ v.NetWt }} </td>
+        
+
+        <td> <a class="viewmapbutton" type="button" href="#openmap" (click)="viewMap(v)"></a> </td>
+      </tr>
+    </table>
+
+
+
+  </div><!-- /.container-fluid -->
+
+  <div class="col-md-12 text-right" *ngIf="pagination === true">
+
+    <ul class="pagination" style="margin-left: auto;display: inline-flex;">
+      <li class="paginate_button page-item previous" [ngClass]="[(fromRecord>1 ) ? '' : 'disabled']"
+        id="example1_previous" style="cursor: pointer;" (click)="previousRecordsClick()">
+        <a aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link" style="background: #fdb813;"><i
+            class="ti-angle-left"></i> Prev</a>
+      </li>
+      <li class="paginate_button page-item next" [ngClass]="[(totalrecords>toRecords) ? '' : 'disabled']"
+        id="example1_next" style="cursor: pointer;" (click)="nextRecordsClick()">
+        <a aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link" style="background: #fdb813;">Next <i
+            class="ti-angle-right"></i></a>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class="overlay" id="openmap">
+
+    <!-- <button aria-label="Close" class="close" id="btnopenmapClose" (click)="close()" type="button">
+          <span aria-hidden="true" style="float: right;color: #000;font-size: 140%;">×</span></button> -->
+
+    <!-- <a class="close" id="btnopenmapClose" (click)="close()">&times;</a>
+    <div class="content">
+      <div id="mapD" style="width: 1000px; height: 500px;margin-left:100px;">
+      </div>
+    </div> -->
+
+    <div class="card"  data-target="#modal" id="card">
+      <div class="card-header">
+          <h3 class="card-title">Title</h3>
+
+          <div class="card-tools">
+
+           
+            
+              <button
+                  id="btnopenmapClose"
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  title="Remove" 
+                  (click)=" close()">
+                  <i class="fa fa-times"></i>
+              </button>
+          </div>
+      </div>
+      <div class="card-body">
+          <div id="mapD" style="width: 100%; height: 400px"></div>
+      </div>
+      <!-- /.card-body -->
+    
+      <!-- /.card-footer-->
+  </div>
+
+
+
+  </div>
+
+
+
+</section>
