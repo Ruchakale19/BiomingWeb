@@ -49,7 +49,7 @@ const routes: Routes = [
             // }
             {
                 path: 'vtsdata',
-                component: VtsreportComponent      // added routing fot vtsreportnew component
+                component: VtsreportnewComponent      // added routing fot vtsreportnew component
             }
         ]
     },
