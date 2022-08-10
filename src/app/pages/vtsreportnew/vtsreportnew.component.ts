@@ -130,7 +130,6 @@ export class VtsreportnewComponent implements OnInit {
     public mapD: Map;
     viewMap(selected) {
         debugger;
-
         let str = [];
         jQuery('#openmap').show();
         this.apiService.getVTSLocationData(selected.Ticket_No).subscribe(

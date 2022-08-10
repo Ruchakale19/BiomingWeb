@@ -40,7 +40,7 @@ export const MENU = [
     {
         name: 'VTS Data',
         iconClasses: 'fas fa-file',
-        path: ['/vtsdata']
+        path: ['/']
     },
     // {
     //     name: 'Main Menu',
