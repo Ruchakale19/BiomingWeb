@@ -20,7 +20,7 @@ import {MessagesComponent} from '@modules/main/header/messages/messages.componen
 import {NotificationsComponent} from '@modules/main/header/notifications/notifications.component';
 import {ButtonComponent} from './components/button/button.component';
 
-import {HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
+import {DatePipe, HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import {UserComponent} from '@modules/main/header/user/user.component';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
@@ -97,8 +97,10 @@ registerLocaleData(localeEn, 'en-EN');
             preventDuplicates: true
         }),
     ],
-    providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },
-        { provide: HTTP_INTERCEPTORS, useClass: NetworkInterceptor, multi: true }],
+    providers: [ DatePipe,
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: NetworkInterceptor, multi: true }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

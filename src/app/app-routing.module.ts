@@ -43,10 +43,10 @@ const routes: Routes = [
                 path: '',
                 component: VtsreportnewComponent
             },
-            // {
-            //     path: 'vtsdata',
-            //     component: VtsreportComponent
-            // }
+            {
+                path: 'dashboard',
+                component: DashboardComponent
+            },
             {
                 path: 'vtsdata',
                 component: VtsreportnewComponent      // added routing fot vtsreportnew component

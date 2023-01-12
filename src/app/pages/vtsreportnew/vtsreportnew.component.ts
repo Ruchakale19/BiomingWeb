@@ -73,8 +73,8 @@ export class VtsreportnewComponent implements OnInit {
         this.totalrecords = 0;
         console.log(this.searchForm.value);
 
-        if (this.searchForm.value.todate > this.searchForm.value.fromdate) {
-            debugger;
+        if (this.searchForm.value.todate >= this.searchForm.value.fromdate) {
+           
 
             this.apiService
                 .getVTSWBData(
@@ -161,7 +161,7 @@ export class VtsreportnewComponent implements OnInit {
                         }
                     ]
                 };
-                debugger;
+               
                 const vectorSource = new VectorSource({
                     features: new GeoJSON().readFeatures(geojsonObject)
                 });

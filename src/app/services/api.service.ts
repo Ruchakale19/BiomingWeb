@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 import { IVTSResponce } from '@/models/IVTSModel';
+import { IDashboardResponce } from '@/models/IDashboardModel';
 
 
 
@@ -46,6 +47,11 @@ export class ApiService {
       getVTSLocationData(Ticket:any): Observable<IVTSResponce> {
         debugger;
         return this._httpClient.get<IVTSResponce>(this.baseURL + "GetVTSLocationData?Ticket="+Ticket)
+          .pipe(catchError(this.handleError));
+      }
+      getdashboardCount(Year:any): Observable<IDashboardResponce> {
+        debugger;
+        return this._httpClient.get<IDashboardResponce>(this.baseURL + "GetDashboardCount?Year="+Year)
           .pipe(catchError(this.handleError));
       }
 }

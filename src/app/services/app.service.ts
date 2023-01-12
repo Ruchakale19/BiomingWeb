@@ -18,7 +18,7 @@ export class AppService {
            // console.log(token)
             localStorage.setItem('token', "123");
             await this.getProfile();
-            this.router.navigate(['/vtsdata']);
+            this.router.navigate(['/dashboard']);
             }
         } catch (error) {
             this.toastr.error(error.message);

@@ -28,16 +28,16 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>150</h3>
-
-                        <p>New Orders</p>
+                        <h3>{{this.dashCountList?.[0].Date}}</h3>
+                        <p>Count :{{this.dashCountList?.[0].Count}} <br>
+                        <p>Net Wt:{{this.dashCountList?.[0].NetWt}} MT</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer"
+                    <!-- <a href="#" class="small-box-footer"
                         >More info <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+                    ></a> -->
                 </div>
             </div>
             <!-- ./col -->
@@ -45,58 +45,81 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                        <p>Bounce Rate</p>
+                        <h3>{{this.dashCountList?.[1]?.Date}}</h3>
+                        <p>Count :{{this.dashCountList?.[1]?.Count}} <br>
+                        <p>Net Wt :{{this.dashCountList?.[1]?.NetWt}} MT</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer"
+                    <!-- <a href="#" class="small-box-footer"
                         >More info <i class="fas fa-arrow-circle-right"></i
-                    ></a>
+                    ></a> -->
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>44</h3>
-
-                        <p>User Registrations</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="#" class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i
-                    ></a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>65</h3>
-
-                        <p>Unique Visitors</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i
-                    ></a>
-                </div>
-            </div>
+          
             <!-- ./col -->
         </div>
         <!-- /.row -->
     </div>
     <!-- Main row -->
     <!-- <div id="mapD" style="width: 100%; height: 400px"></div> -->
- 
+    <div class="container-fluid">
+        <div class="row" >
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Monthly Data</h3>
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                              <select type="text" name="table_search" class="form-control float-right" (change)="GetDataByYear($event.target.value)">
+                                <option *ngFor="let yr of yearList;let i = index; let last =last" [selected]="last"  [value]="yr">{{yr}}</option>
+                              </select>
+                              <!-- <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                  <i class="fas fa-search"></i>
+                                </button>
+                              </div> -->
+                            </div>
+                          </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body" >
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <!-- <th style="width: 10px">#</th> -->
+                                    <th>Month</th>
+                                    <th>Count</th>
+                                    <th>Net Wt (MT)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dashMothlyList">
+                                    <!-- <td>{{i + 1}}</td> -->
+                                    <td>{{item.Date}}</td>
+                                    <td>
+                                        <span class="badge bg-warning"> {{item.Count}}</span>                                       
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary"> {{item.NetWt}}</span>
+                                    </td>
+                                </tr>                              
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    
+                </div>
+                <!-- /.card -->
+
+               
+                <!-- /.card -->
+            </div>
+
+        </div>
+
+    </div>
 </section>
 <!-- /.content -->
