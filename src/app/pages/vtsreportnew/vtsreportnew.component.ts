@@ -7,9 +7,8 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {BlankComponent} from '@pages/blank/blank.component';
 import Swal from 'sweetalert2';
 
-declare var $:any
+declare var $: any;
 declare var jQuery: any;
-
 
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -24,6 +23,7 @@ import {Circle as CircleStyle, Fill, Icon, Stroke, Style} from 'ol/style';
 import {LineString} from 'ol/geom';
 import Feature from 'ol/Feature';
 import {transform} from 'ol/proj';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-vtsreportnew',
@@ -37,10 +37,28 @@ export class VtsreportnewComponent implements OnInit {
     Vtsdata: VTSModel[];
 
     fromRecord = 1;
-    toRecords = 10;
+    // toRecords = 30;
     totalrecords = 0;
 
+    totalPages = 0;
+    currentPage = 1;
+    ntWtSoil = 0;
+    ntWtSteel = 0;
+
     pagination = false;
+    soilList: any = [];
+    stoneList: any = [];
+    searchArray = [];
+    searchText = '';
+    entryValue = 30;
+    entry = 30;
+
+    soilVehicleCount = 0;
+    stoneVehicleCount = 0;
+    soilVehicleNtWt = 0;
+    stoneVehicleNtWt = 0;
+
+    fileName = 'ExcelSheet.xlsx';
 
     lstVtsData: any = [];
 
@@ -54,10 +72,12 @@ export class VtsreportnewComponent implements OnInit {
     ) {
         this.pagination = false;
     }
+
     // sourceL = new VectorSource({
     //     url: this.baseURL+'/DewateringLoc.json',
     //     format: new GeoJSON()
     //   });
+
     ngOnInit(): void {
         debugger;
         this.pagination = false;
@@ -66,16 +86,16 @@ export class VtsreportnewComponent implements OnInit {
             todate: [new Date(), [Validators.required]]
         });
     }
+
     onSubmit() {
         debugger;
+        this.searching = false;
         this.Vtsdata = [];
         this.lstVtsData = [];
         this.totalrecords = 0;
         console.log(this.searchForm.value);
 
         if (this.searchForm.value.todate >= this.searchForm.value.fromdate) {
-           
-
             this.apiService
                 .getVTSWBData(
                     this.searchForm.value.fromdate,
@@ -86,11 +106,69 @@ export class VtsreportnewComponent implements OnInit {
                         debugger;
                         this.Vtsdata = result.Data;
                         //  console.log(result);
-                        this.totalrecords = this.Vtsdata.length;
-                        if (this.Vtsdata.length > 10) {
+                        if (this.Vtsdata != undefined) {
+                            this.totalrecords = this.Vtsdata.length;
+                        }
+
+                        debugger;
+                        if (this.totalrecords != 0) {
+                            for (var i = 0; i < this.Vtsdata.length; i++) {
+                                this.Vtsdata[i].TareTime = this.Vtsdata[
+                                    i
+                                ].TareTime.slice(0, -8);
+                                this.Vtsdata[i].GrossTime = this.Vtsdata[
+                                    i
+                                ].GrossTime.slice(0, -8);
+                            }
+
+                            var remainder = this.totalrecords % this.entryValue;
+
+                            this.soilList = this.Vtsdata.filter((p) =>
+                                p.Item_Name.includes('SOIL')
+                            );
+                            this.soilVehicleCount = this.soilList.length;
+
+                            this.soilVehicleNtWt = this.soilList.reduce(
+                                function (prev, cur) {
+                                    return Number(prev) + Number(cur.NetWt);
+                                },
+                                0
+                            );
+
+                            this.soilVehicleNtWt = Math.floor(
+                                this.soilVehicleNtWt / 1000
+                            );
+
+                            this.stoneList = this.Vtsdata.filter((t) =>
+                                t.Item_Name.includes('STONE')
+                            );
+
+                            this.stoneVehicleNtWt = this.stoneList.reduce(
+                                function (prev, cur) {
+                                    return prev.NetWt + cur.NetWt;
+                                },
+                                0
+                            );
+
+                            this.stoneVehicleCount = this.stoneList.length;
+                            debugger;
+
+                            if (remainder != 0) {
+                                this.totalPages =
+                                    Math.floor(
+                                        this.totalrecords / this.entryValue
+                                    ) + 1;
+                            } else {
+                                this.totalPages = Math.floor(
+                                    this.totalrecords / this.entryValue
+                                );
+                            }
+                        }
+
+                        if (this.Vtsdata.length > this.entryValue) {
                             this.pagination = true;
 
-                            for (var i = 0; i < 10; i++) {
+                            for (var i = 0; i < this.entryValue; i++) {
                                 this.lstVtsData.push(this.Vtsdata[i]);
                             }
                         } else {
@@ -161,7 +239,7 @@ export class VtsreportnewComponent implements OnInit {
                         }
                     ]
                 };
-               
+
                 const vectorSource = new VectorSource({
                     features: new GeoJSON().readFeatures(geojsonObject)
                 });
@@ -223,7 +301,7 @@ export class VtsreportnewComponent implements OnInit {
     closeWindow() {
         debugger;
         jQuery('#openmap').hide();
-        $("#btnopenmapClose").click();
+        $('#btnopenmapClose').click();
     }
 
     onActivate(event) {
@@ -232,14 +310,16 @@ export class VtsreportnewComponent implements OnInit {
 
     previousRecordsClick() {
         debugger;
+
         if (this.fromRecord > 1) {
             debugger;
             this.lstVtsData = [];
             let FN = +this.fromRecord - +this.recordCount;
-            this.toRecords = this.fromRecord - 1;
+            this.entryValue = this.fromRecord - 1;
+            this.currentPage = this.currentPage - 1;
             this.fromRecord = FN < 0 ? 0 : FN;
 
-            for (var k = this.fromRecord - 1; k < this.toRecords; k++) {
+            for (var k = this.fromRecord - 1; k < this.entryValue; k++) {
                 if (this.Vtsdata[k] != undefined) {
                     this.lstVtsData.push(this.Vtsdata[k]);
                 }
@@ -247,21 +327,102 @@ export class VtsreportnewComponent implements OnInit {
         }
     }
 
-    recordCount = 10;
+    recordCount = 30;
     nextRecordsClick() {
         debugger;
-        if (this.toRecords < this.totalrecords) {
+        if (this.entryValue < this.totalrecords) {
             debugger;
             this.lstVtsData = [];
-            this.fromRecord = +this.toRecords + 1;
-            this.toRecords = this.toRecords + this.recordCount;
+            this.fromRecord = +this.entryValue + 1;
+            this.currentPage = this.currentPage + 1;
+            this.entryValue = this.entryValue + this.recordCount;
             // this.BindAllVehiclesList('');
 
-            for (var j = this.fromRecord - 1; j < this.toRecords; j++) {
+            for (var j = this.fromRecord - 1; j < this.entryValue; j++) {
                 if (this.Vtsdata[j] != undefined) {
                     this.lstVtsData.push(this.Vtsdata[j]);
                 }
             }
         }
     }
+
+    searching = false;
+    search() {
+        debugger;
+
+        if (this.searchText != '') {
+            debugger;
+            this.searching = true;
+            // let rVal = (val.id.toLocaleLowerCase().includes(args)) || (val.email.toLocaleLowerCase().includes(args));
+            this.searchArray = this.lstVtsData.filter(
+                (x) =>
+                    x.Ticket_No.includes(this.searchText) ||
+                    x.Vehicle_No.includes(this.searchText) ||
+                    x.Item_Name.includes(this.searchText) ||
+                    x.Vehicletype.includes(this.searchText) ||
+                    x.StartPOI.includes(this.searchText) ||
+                    x.EndPOI.includes(this.searchText)
+            );
+
+            debugger;
+            this.lstVtsData = this.searchArray;
+        }
+    }
+
+    refresh() {
+        this.searching = false;
+        this.searchText = '';
+        this.onSubmit();
+    }
+
+    getEntries() {
+        debugger;
+        this.entryValue = Number(this.entry);
+        this.recordCount = this.entryValue;
+        this.onSubmit();
+    }
+
+    export() {
+        debugger;
+        if (this.totalrecords > 0) {
+
+            this.lstVtsData = this.Vtsdata;
+
+            let element = document.getElementById('excel-export-table');
+            /* pass here the table id */
+            const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+            /* generate workbook and add the worksheet */
+            const wb: XLSX.WorkBook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+            /* save to file */
+            XLSX.writeFile(wb, this.fileName);
+        }
+
+        else {
+            Swal.fire({
+                text: 'No Data to export!',
+                icon: 'error'
+            });
+        }
+        
+    }
+
+    ascendingValue: any = false;
+    columnName:any;
+    sort(colName, boolean) {
+        debugger;
+        this.columnName = colName;
+        if (boolean == true){
+            this.lstVtsData.sort((a, b) => a[colName] < b[colName] ? 1 : a[colName] > b[colName] ? -1 : 0)
+            this.ascendingValue = !this.ascendingValue
+        }
+        else{
+            this.lstVtsData.sort((a, b) => a[colName] > b[colName] ? 1 : a[colName] < b[colName] ? -1 : 0)
+            this.ascendingValue = !this.ascendingValue
+        }
+        debugger;
+    }
+    
 }

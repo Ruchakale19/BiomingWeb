@@ -6,7 +6,7 @@ table {
   
   td, th {
     border: 1px solid #dddddd;
-    text-align: left;
+    text-align: center;
     padding: 8px;
   }
   
@@ -59,3 +59,10 @@ table {
   visibility: visible;
   opacity: 1;
 }
+
+  .fa-arrow-down {
+    font-size: 11px;
+  }
+  .fa-arrow-up {
+    font-size: 11px;
+  }

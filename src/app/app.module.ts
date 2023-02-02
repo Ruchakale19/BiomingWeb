@@ -20,7 +20,7 @@ import {MessagesComponent} from '@modules/main/header/messages/messages.componen
 import {NotificationsComponent} from '@modules/main/header/notifications/notifications.component';
 import {ButtonComponent} from './components/button/button.component';
 
-import {DatePipe, HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
+import {CommonModule, DatePipe, HashLocationStrategy, LocationStrategy, registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import {UserComponent} from '@modules/main/header/user/user.component';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
@@ -86,6 +86,7 @@ registerLocaleData(localeEn, 'en-EN');
     imports: [
         BrowserModule,
         FormsModule,
+        CommonModule,
         StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
         HttpClientModule,
         AppRoutingModule,

@@ -15,28 +15,67 @@
           <form class="form-horizontal" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
             <div class="card-body">
               <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">From date</label>
-                <div class="col-sm-4">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">From date</label> 
+                <div class="col-sm-3">
                   <input type="date" class="form-control" id="inputEmail3" placeholder="From date"
                     formControlName="fromdate">
                 </div>
+
               </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-2 col-form-label">To Date</label>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                   <input type="date" class="form-control" id="inputPassword3" placeholder="To Date"
                     formControlName="todate">
                 </div>
               </div>
+              <br>
+
+              <div class="card-footer">
+                <div class="form-group row">
+                  <div class="col-sm-1">
+                    <button type="submit" class="btn btn-info">Search</button>
+                  </div>
+  
+                  <div class="col-sm-2" *ngIf="totalrecords>0">
+                    <button class="btn btn-info" (click)="export()">Export to Excel</button>
+                  </div>
+                </div>
+                
+                <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
+  
+                <!-- <a class="button" href="#openmap">Let me Pop up</a> -->
+  
+              </div>
+
+              <br>
+
+              <div *ngIf="totalrecords>0">
+                <table style="width: 50%;">
+                  <tr>
+                    <th>Type of Waste</th>
+                    <th> Total Vehicles</th>
+                    <th>Nt Weight(TN)</th>
+                  </tr>
+                  <tr>
+                    <td>Soil</td>
+                    <td> {{ soilVehicleCount }} </td>
+                    <td> {{ soilVehicleNtWt }} </td>
+                  </tr>
+                  <tr>
+                    <td>Stone</td>
+                    <td> {{ stoneVehicleCount }} </td>
+                    <td> {{ stoneVehicleNtWt }} </td>
+                  </tr>
+                  
+                </table>
+              </div>
+
+
+
             </div>
             <!-- /.card-body -->
-            <div class="card-footer">
-              <button type="submit" class="btn btn-info">Search</button>
-              <!-- <button type="submit" class="btn btn-default float-right">Cancel</button> -->
-
-              <!-- <a class="button" href="#openmap">Let me Pop up</a> -->
-
-            </div>
+            
             <!-- /.card-footer -->
           </form>
         </div>
@@ -69,42 +108,167 @@
 
     <br>
 
-    <table *ngIf="lstVtsData.length > 0">
-      <tr style="text-align: center;">
+    <div class="card" *ngIf="totalrecords>0"> 
+
+      <br>
+
+      <div class="form-group row" style="margin-left: 10px;">
+        Show
+        &nbsp;
+          <input style="text-align: center;height: 30px;" name="entry" size="1" id="entry" type="text" [(ngModel)]="entry"> &nbsp; entries &nbsp;
+          <button style="height: 35px;" class="btn btn-info" (click)="getEntries()">GO</button>
+          &nbsp;
+            
+        <input style="margin-left: 630px;"  name="searchText" id="searchText" type="text" [(ngModel)]="searchText" 
+                placeholder="search here..."> &nbsp; &nbsp;
+        <button type="submit" class="btn btn-info" (click)="search()">Search</button> &nbsp;
+        <button class="btn btn-info" (click)="refresh()">Refresh</button>
+        <br>
+      </div>   
+
+      <table *ngIf="lstVtsData.length > 0" id="excel-table">
+        <tr style="text-align: center;font-size: 14px;background-color: green;color: #fff;height: 50px;">
+          <!-- <th style="width: 11%;" class="tableHeader" *ngFor="let col of tableHeaders" (click)="sort(col.name, ascendingValue)"> {{ col.name }} <i class="fa fa-arrow-down"></i> </th> -->
+          <th style="width: 9%;" (click)="sort('Ticket_No', ascendingValue)">
+            Ticket_No 
+            <i *ngIf="!ascendingValue && columnName === 'Ticket_No'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'Ticket_No'" class="fa fa-arrow-up"></i>
+            
+          </th>
+          <th style="width: 8%;" (click)="sort('TareDate', ascendingValue)">
+            TareDate 
+            <i *ngIf="!ascendingValue && columnName === 'TareDate'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'TareDate'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 8%;" (click)="sort('TareTime', ascendingValue)">
+            TareTime 
+            <i *ngIf="!ascendingValue && columnName === 'TareTime'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'TareTime'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 9%;" (click)="sort('GrossDate', ascendingValue)">
+            GrossDate 
+            <i *ngIf="!ascendingValue && columnName === 'GrossDate'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'GrossDate'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 9%;" (click)="sort('GrossTime', ascendingValue)">
+            GrossTime 
+            <i *ngIf="!ascendingValue && columnName === 'GrossTime'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'GrossTime'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 9%;" (click)="sort('Vehicle_No', ascendingValue)">
+            Vehicle_No 
+            <i *ngIf="!ascendingValue && columnName === 'Vehicle_No'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'Vehicle_No'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 7%;" (click)="sort('Item_Name', ascendingValue)">
+            Material 
+            <i *ngIf="!ascendingValue && columnName === 'Item_Name'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'Item_Name'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 6%;" (click)="sort('NetWt', ascendingValue)">
+            NetWt 
+            <i *ngIf="!ascendingValue && columnName === 'NetWt'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'NetWt'" class="fa fa-arrow-up"></i>
+          </th>
+          <th (click)="sort('StartPOI', ascendingValue)">
+            StartPOI 
+            <i *ngIf="!ascendingValue && columnName === 'StartPOI'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'StartPOI'" class="fa fa-arrow-up"></i>
+          </th>
+          <th (click)="sort('StartDate', ascendingValue)">
+            StartDate 
+            <i *ngIf="!ascendingValue && columnName === 'StartDate'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'StartDate'" class="fa fa-arrow-up"></i>
+          </th>
+          <th (click)="sort('EndPOI', ascendingValue)">
+            EndPOI 
+            <i *ngIf="!ascendingValue && columnName === 'EndPOI'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'EndPOI'" class="fa fa-arrow-up"></i>
+          </th>
+          <th style="width: 7%;" (click)="sort('EndDate', ascendingValue)">
+            EndDate 
+            <i *ngIf="!ascendingValue && columnName === 'EndDate'" class="fa fa-arrow-down"></i> 
+            <i *ngIf="ascendingValue && columnName === 'EndDate'" class="fa fa-arrow-up"></i>
+          </th>
+
+          <th style="width: 3%;">Map</th>
+        </tr>
+        <tr *ngFor="let v of lstVtsData" style="text-align: center;font-size: 12px;">
+          <td> {{ v.Ticket_No }} </td>
+          <td> {{ v.TareDate }} </td>
+          <td> {{ v.TareTime }} </td>
+          <td> {{ v.GrossDate }} </td> 
+          <td> {{ v.GrossTime }} </td>
+          <td> {{ v.Vehicle_No }} </td>
+          <td> {{ v.Item_Name }} </td>
+          <td> {{ v.NetWt }} </td>
+          <td> {{ v.StartPOI }} </td>
+          <td> {{ v.StartDate | date:'MM/dd/yy h:mm:ss a' }} </td>
+          <td> {{ v.EndPOI }} </td>
+          <td> {{ v.EndDate | date:'MM/dd/yy h:mm:ss a' }} </td>
+  
+  
+          <td> <a class="viewmapbutton" type="button" href="#openmap" (click)="viewMap(v)"></a> </td>
+        </tr>
+      </table>
+
+    </div>
+
+    <table *ngIf="lstVtsData.length > 0" id="excel-export-table" hidden>
+      <tr style="text-align: center;font-size: 15px;background-color: green;color: #fff;height: 50px;">
         <th>Ticket_No</th>
+        <th>TareDate</th>
+        <th>TareTime</th>
+        <th>GrossDate</th>
+        <th>GrossTime</th>
         <th>Vehicle_No</th>
-        <th>Net_Date</th>
-        <th>Net_Time</th>
-        <th>TareWt</th>
+        <th>Material</th>
         <th>NetWt</th>
+        <th>StartPOI</th>
+        <th>StartDate</th>
+        <th>EndPOI</th>
+        <th>EndDate</th>
         <th>Map</th>
       </tr>
-      <tr *ngFor="let v of lstVtsData">
+      <tr *ngFor="let v of Vtsdata" style="text-align: center;font-size: 12px;">
         <td> {{ v.Ticket_No }} </td>
+        <td> {{ v.TareDate }} </td>
+        <td> {{ v.TareTime }} </td>
+        <td> {{ v.GrossDate }} </td> 
+        <td> {{ v.GrossTime }} </td>
         <td> {{ v.Vehicle_No }} </td>
-        <td> {{ v.Net_Date }} </td>
-        <td> {{ v.Net_Time }} </td>
-        <td> {{ v.TareWt }} </td>
+        <td> {{ v.Item_Name }} </td>
         <td> {{ v.NetWt }} </td>
-        
-
-        <td> <a class="viewmapbutton" type="button" href="#openmap" (click)="viewMap(v)"></a> </td>
+        <td> {{ v.StartPOI }} </td>
+        <td> {{ v.StartDate | date:'MM/dd/yy h:mm:ss a' }} </td>
+        <td> {{ v.EndPOI }} </td>
+        <td> {{ v.EndDate | date:'MM/dd/yy h:mm:ss a' }} </td>
       </tr>
     </table>
+
+   
 
 
 
   </div><!-- /.container-fluid -->
 
-  <div class="col-md-12 text-right" *ngIf="pagination === true">
+  <div class="col-md-12 text-right" *ngIf="pagination === true && searching === false">
+
+    <br>
+
+
 
     <ul class="pagination" style="margin-left: auto;display: inline-flex;">
+
+      <p style="margin-right: 550px;"> {{ currentPage }} / {{ totalPages }} </p>
+
+
       <li class="paginate_button page-item previous" [ngClass]="[(fromRecord>1 ) ? '' : 'disabled']"
         id="example1_previous" style="cursor: pointer;" (click)="previousRecordsClick()">
         <a aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link" style="background: #fdb813;"><i
             class="ti-angle-left"></i> Prev</a>
       </li>
-      <li class="paginate_button page-item next" [ngClass]="[(totalrecords>toRecords) ? '' : 'disabled']"
+      <li class="paginate_button page-item next" [ngClass]="[(totalrecords>entryValue) ? '' : 'disabled']"
         id="example1_next" style="cursor: pointer;" (click)="nextRecordsClick()">
         <a aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link" style="background: #fdb813;">Next <i
             class="ti-angle-right"></i></a>
@@ -115,41 +279,27 @@
 
   <div class="overlay" id="openmap">
 
-    <!-- <button aria-label="Close" class="close" id="btnopenmapClose" (click)="close()" type="button">
-          <span aria-hidden="true" style="float: right;color: #000;font-size: 140%;">×</span></button> -->
-
-    <!-- <a class="close" id="btnopenmapClose" (click)="close()">&times;</a>
-    <div class="content">
-      <div id="mapD" style="width: 1000px; height: 500px;margin-left:100px;">
-      </div>
-    </div> -->
-
-    <div class="card"  data-target="#modal" id="card">
+    <div class="card" data-target="#modal" id="card">
       <div class="card-header">
-          <h3 class="card-title">Title</h3>
+        <h3 class="card-title">Title</h3>
 
-          <div class="card-tools">
+        <div class="card-tools">
 
-           
-            
-              <button
-                  id="btnopenmapClose"
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  title="Remove" 
-                  (click)=" close()">
-                  <i class="fa fa-times"></i>
-              </button>
-          </div>
+
+
+          <button id="btnopenmapClose" type="button" class="close" data-dismiss="modal" title="Remove"
+            (click)=" close()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
       </div>
       <div class="card-body">
-          <div id="mapD" style="width: 100%; height: 400px"></div>
+        <div id="mapD" style="width: 100%; height: 400px"></div>
       </div>
       <!-- /.card-body -->
-    
+
       <!-- /.card-footer-->
-  </div>
+    </div>
 
 
 
